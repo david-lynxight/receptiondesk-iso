@@ -1,0 +1,12 @@
+# Copy this file to /etc/systemd/system/backlight_monitor.service
+[Unit]
+Description=Service to monitor backlight and adjust it accordingly
+
+[Service]
+# This path may need to be adjusted to the location of the script
+ExecStart=/opt/lynxight/set_backlight_to_max.sh
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

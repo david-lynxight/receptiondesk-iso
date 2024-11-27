@@ -1,0 +1,90 @@
+version: 1
+locale: en_US
+keyboard:
+  layout: us
+identity:
+  hostname: lynxight-deploy
+  username: ubuntu
+  password: "$6$predefined_salt$7.WZEn7YN7pml54pNGnXOJVUK.I/ZQRWFiZPwv3nXfKHHsq2QusP2dld56.694h4y0k9V9wFomtbmrsFb6mfW0"
+ssh:
+  install-server: true
+  allow-pw: true
+
+packages:
+  - ubuntu-desktop
+  - gdm3
+  - gnome-shell
+  - network-manager
+  - openvswitch-switch-dpdk
+
+storage:
+  config:
+    - type: disk
+      id: disk0
+      reset-partition: true
+      match:
+        size: smallest
+      ptable: gpt
+      wipe: superblock-recursive
+    - type: partition
+      id: partition-efi
+      device: disk0
+      size: 512MB
+      grub_device: true
+      flag: boot
+    - type: format
+      id: format-efi
+      volume: partition-efi
+      fstype: fat32
+    - type: mount
+      id: mount-efi
+      device: format-efi
+      path: /boot/efi
+    - type: partition
+      id: partition-0
+      device: disk0
+      size: -1  # Use all available space
+    - type: format
+      id: format-0
+      volume: partition-0
+      fstype: ext4
+    - type: mount
+      id: mount-0
+      device: format-0
+      path: /
+
+network:
+  version: 2
+  ethernets:
+    any:
+      match:
+        name: en*
+      dhcp4: true
+
+user-data:
+  disable_root: false
+
+late-commands:
+
+  - curtin in-target -- mkdir -p /opt/lynxight/misc
+  - curtin in-target -- cp /cdrom/lynxight/misc/brightness_monitor.desktop /opt/lynxight/misc/
+  - curtin in-target -- cp /cdrom/lynxight/misc/allow_only_tap.desktop /opt/lynxight/misc/
+  - curtin in-target -- cp /cdrom/lynxight/misc/reception_app.desktop /opt/lynxight/misc/
+  - curtin in-target -- cp /cdrom/lynxight/misc/volume_monitor.desktop /opt/lynxight/misc/
+  - curtin in-target -- cp /cdrom/lynxight/misc/backlight_monitor.service /etc/systemd/system/
+  - curtin in-target -- cp /cdrom/lynxight/lx_setnet.sh /opt/lynxight/
+  - curtin in-target -- cp /cdrom/lynxight/allow_only_tap.py /opt/lynxight/
+  - curtin in-target -- cp /cdrom/lynxight/lynxight_start.sh /opt/lynxight/
+  - curtin in-target -- cp /cdrom/lynxight/volume_monitor.sh /opt/lynxight/
+  - curtin in-target -- cp /cdrom/lynxight/setup_station.sh /opt/lynxight/
+  - curtin in-target -- cp /cdrom/lynxight/set_backlight_to_max.sh /opt/lynxight
+  - curtin in-target -- cp /cdrom/lynxight/brightness_monitor.sh /opt/lynxight/
+  - curtin in-target -- chmod +x /opt/lynxight/allow_only_tap.py
+  - curtin in-target -- chmod +x /opt/lynxight/lynxight_start.sh
+  - curtin in-target -- chmod +x /opt/lynxight/volume_monitor.sh
+  - curtin in-target -- chmod +x /opt/lynxight/lx_setnet.sh
+  - curtin in-target -- chmod +x /opt/lynxight/set_backlight_to_max.sh
+  - curtin in-target -- chmod +x /opt/lynxight/brightness_monitor.sh
+  - curtin in-target -- chmod -R +x /opt/lynxight/misc/
+  - curtin in-target -- apt remove -y appstream
+  - curtin in-target -- apt -y remove ubuntu-advantage-tools

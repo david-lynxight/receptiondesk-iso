@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=gnome-terminal -- /bin/bash -c "/opt/lynxight/brightness_monitor.sh"
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Brightness Monitor
+Name=Brightness Monitor
+Comment[en_US]=
+Comment=

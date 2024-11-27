@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=gnome-terminal -- /bin/bash -c "/opt/lynxight/allow_only_tap.py"
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Allow Only Tap
+Name=Allow Only Tap
+Comment[en_US]=
+Comment=

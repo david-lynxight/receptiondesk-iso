@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=gnome-terminal -- /bin/bash -c /opt/lynxight/volume_monitor.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Volume Monitor
+Name=Volume Montior
+Comment[en_US]=
+Comment=
